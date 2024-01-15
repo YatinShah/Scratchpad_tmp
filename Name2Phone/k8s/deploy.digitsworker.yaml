@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: digitsworker-deployment
+  labels:
+    app: digitsworker
+spec:
+  replicas: 1
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: digitsworker
+  template:
+    metadata:
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/config: "daprconfig-k8s"
+        dapr.io/app-id: "digitsworker"
+        dapr.io/app-port: "5000"
+        dapr.io/app-protocol: http
+        dapr.io/log-level: debug
+        dapr.io/enable-api-logging: "true"
+        dapr.io/app-health-check-path: /health
+      labels:
+        app: digitsworker
+    spec:
+      containers:
+      - name: digitsworker
+        imagePullPolicy: Never
+        image: digitsworker:latest
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 50          
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 50         
+
+
+# service def
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: digitsworker-srv
+  labels: 
+    app: digitsworker
+spec:
+  type: NodePort
+  selector:
+    app: digitsworker
+  ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 30500
+    protocol: TCP
+    name: http

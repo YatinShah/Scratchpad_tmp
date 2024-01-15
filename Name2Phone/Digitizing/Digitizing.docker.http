@@ -1,0 +1,139 @@
+﻿@Digitizing_HostAddress = http://localhost:5216
+@Digitizing_Dapr_HostAddress = http://localhost:3506
+@dapr_Api_Ver = v1.0
+@stateStore = digistore
+@configStore = digiconfig
+@secretStore = digitizingsecrets
+@pubsub = digitizingpubsub
+@dapr_local_app_name= digitizer
+@dapr_local_api_path = api/Name/Elaborate
+@remote_app_base = http://istdapi:5142
+@remote_app_path = api/Istd/Format
+
+################# DAPR Guts
+
+GET {{Digitizing_HostAddress}}/api/dapr/Sidecar/10
+
+###
+GET {{Digitizing_HostAddress}}/api/dapr/SidecarHealth
+
+###
+GET {{Digitizing_HostAddress}}/api/dapr/SidecarPartialHealth
+
+###
+
+GET {{Digitizing_HostAddress}}/api/dapr/ConfigValues
+
+###
+#(local & docker, multivalue=true)
+GET {{Digitizing_HostAddress}}/api/dapr/SecretValues/layered
+###
+
+GET {{Digitizing_HostAddress}}/api/dapr/StateValues/Key1
+
+###
+
+POST {{Digitizing_HostAddress}}/api/dapr/StateValues
+Content-Type: application/json
+
+{
+  "Key": "Key1",
+  "Value": "Key1-Value"
+}
+
+###
+
+POST {{Digitizing_HostAddress}}/api/dapr/digicron
+
+###
+
+# DELETE {{Digitizing_HostAddress}}/api/dapr/Sidecar
+
+###
+#######################
+
+POST {{Digitizing_HostAddress}}/api/name/NumberToText/0014695762345
+
+###
+
+POST {{Digitizing_HostAddress}}/api/name/Result
+Content-Type: application/json
+
+{
+  "Nr":"9725689875",
+  "CountryCode": "001"
+}
+
+###
+@Digitizing_HostAddress = 
+
+GET {{Digitizing_HostAddress}}/api/name/TextToNumber/001MyNameYati
+
+###
+
+GET {{Digitizing_HostAddress}}/api/name/Digitize/001MyNameYati
+
+###
+GET {{Digitizing_HostAddress}}/api/name/Elaborate/string
+
+###
+GET {{Digitizing_HostAddress}}/health
+
+###
+######################### Works in Local Or Docker only !!!
+POST {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/state/{{stateStore}}
+Content-Type: application/json
+
+[
+    {
+        "key": "state",
+        "value": "Gotham"
+    },
+    {
+        "key": "Name",
+        "value": "Bruce Wayne"
+    },
+    {
+        "key": "Aka",
+        "value": "Batman"
+    }
+]
+
+###
+GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/state/{{stateStore}}/state
+###
+
+DELETE {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/state/{{stateStore}}/state
+
+###
+GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/secrets/{{secretStore}}/layered
+### (MultiValue=true)
+GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/secrets/{{secretStore}}/layered
+
+### K8s (MultiValue=false)###
+GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/secrets/digitizing-secrets/digitizingsecrets
+
+###
+POST {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/publish/{{pubsub}}/result?metadata.rawPayload=false
+Content-Type: application/json
+
+{
+    "Nr":"3451236789",
+    "CountryCode":"001"
+}
+
+###
+GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/configuration/{{configStore}}?key=configKey1
+###
+GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/invoke/{{dapr_local_app_name}}/method/{{dapr_local_api_path}}/Myname
+
+###
+GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/invoke/{{remote_app_base}}/method/{{remote_app_path}}/001
+
+###
+GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/healthz
+###
+
+GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/metadata
+###
+GET http://localhost:8080/placement/state

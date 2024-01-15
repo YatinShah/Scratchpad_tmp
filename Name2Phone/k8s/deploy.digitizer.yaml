@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: digitizer-deployment
+  labels:
+    app: digitizer
+spec:
+  replicas: 1
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: digitizer
+  template:
+    metadata:
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/config: "daprconfig-k8s"
+        dapr.io/app-id: "digitizer"
+        dapr.io/app-port: "5216"
+        dapr.io/app-protocol: http
+        dapr.io/log-level: debug
+        dapr.io/enable-api-logging: "true"
+        dapr.io/app-health-check-path: /health
+      labels:
+        app: digitizer
+    spec:
+      containers:
+      - name: digitizer
+        imagePullPolicy: Never
+        image: digitizer:latest
+        env:
+            - name: AppCfg__IstdServiceBaseUrl
+              valueFrom:
+                configMapKeyRef:
+                    name: digitizer-cfgmap
+                    key: AppCfg__IstdServiceBaseUrl
+            - name: AppCfg__WorkerServiceAppId
+              valueFrom:
+                configMapKeyRef:
+                    name: digitizer-cfgmap
+                    key: AppCfg__WorkerServiceAppId
+            - name: AppCfg__SecretStore
+              valueFrom:
+                configMapKeyRef:
+                    name: digitizer-cfgmap
+                    key: AppCfg__SecretStore
+            - name: AppCfg__StateStore
+              valueFrom:
+                configMapKeyRef:
+                    name: digitizer-cfgmap
+                    key: AppCfg__StateStore
+            - name: AppCfg__ConfigStore
+              valueFrom:
+                configMapKeyRef:
+                    name: digitizer-cfgmap
+                    key: AppCfg__ConfigStore
+        ports:
+        - containerPort: 5216
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5216
+          initialDelaySeconds: 3
+          periodSeconds: 50          
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5216
+          initialDelaySeconds: 3
+          periodSeconds: 50         
+        volumeMounts:
+          - mountPath: "/tmp/vol"
+            name: resources
+            
+      volumes:
+        - name: resources
+          persistentVolumeClaim:
+            claimName: config-volume-pvc
+
+# service def
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: digitizer-srv
+  labels: 
+    app: digitizer
+spec:
+  type: NodePort
+  selector:
+    app: digitizer
+  ports:
+  - port: 5216
+    targetPort: 5216
+    nodePort: 30216
+    protocol: TCP
+    name: http

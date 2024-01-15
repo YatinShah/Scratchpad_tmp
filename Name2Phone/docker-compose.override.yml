@@ -1,0 +1,60 @@
+version: '3.4'
+
+services:
+  digitizer:
+    healthcheck: #does not work, as there is no curl installed on the containers!!
+        test: curl -f http://localhost:5216/health || exit 1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_URLS=http://+:5216
+      - DAPR_HTTP_PORT=3506
+      - DAPR_GRPC_PORT=50001
+      - APPCFG__ISTDSERVICEBASEURL=http://istdapi:5142
+      - APPCFG__WORKERSERVICEAPPID=digitsworker
+      - APPCFG__PUBSUB__PUBLISHCOMP=digiworkerpubsub
+      - APPCFG__STATESTORE=digistore
+      - APPCFG__CONFIGSTORE=digiconfig
+      - APPCFG__SECRETSTORE=digitizingsecrets
+    ports:
+      - "5216"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  digitsworker:
+    healthcheck: #does not work, as there is no curl installed on the containers!!
+        test: curl -f http://localhost:5000/health || exit 1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_URLS=http://+:5000
+      - DAPR_HTTP_PORT=3500
+      - DAPR_GRPC_PORT=50002
+      - APPCFG__PUBSUB__PUBLISHCOMP=digitizingpubsub
+    ports:
+      - "5000"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro  
+  digitext:
+    healthcheck: #does not work, as there is no curl installed on the containers!!
+        test: curl -f http://localhost:5002/health || exit 1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_URLS=http://+:5002
+      - DAPR_HTTP_PORT=3502
+      - DAPR_GRPC_PORT=50007
+    ports:
+      - "5002"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro  
+  istdapi:
+    healthcheck: #does not work, as there is no curl installed on the containers!!
+        test: curl -f http://localhost:5142/health || exit 1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_URLS=http://+:5142
+    ports:
+      - "5142"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

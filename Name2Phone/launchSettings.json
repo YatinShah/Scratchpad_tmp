@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "digitext": "StartDebugging",
+        "digitext-sidecar": "StartWithoutDebugging",
+        "digitizer": "StartDebugging",
+        "digitizer-sidecar": "StartWithoutDebugging",
+        "digitsworker": "StartDebugging",
+        "digitsworker-sidecar": "StartWithoutDebugging",
+        "istdapi": "StartDebugging",
+        "placement": "StartWithoutDebugging",
+        "redis": "StartWithoutDebugging",
+        "zipkin": "StartWithoutDebugging"
+      }
+    }
+  }
+}

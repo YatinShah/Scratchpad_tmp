@@ -1,0 +1,58 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: dapr
+runtimeConfig:
+  "api/alpha": "true"
+networking:
+  ipFamily: ipv4
+  apiServerAddress: 127.0.0.1
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"    
+  extraPortMappings:
+#digitsworker
+  - containerPort: 30500
+    hostPort: 5000
+    protocol: TCP
+#digitizer
+  - containerPort: 30216
+    hostPort: 5216
+    protocol: TCP
+# digitext
+  - containerPort: 30202
+    hostPort: 5002
+    protocol: TCP
+#istdapi
+  - containerPort: 30142
+    hostPort: 5142
+    protocol: TCP
+#zipkin
+  - containerPort: 30411
+    hostPort: 9411
+    protocol: TCP
+#dashboard
+  - containerPort: 30999
+    hostPort: 9999
+    protocol: TCP
+#j4f
+  - containerPort: 30443
+    hostPort: 8443
+    protocol: TCP
+  extraMounts:
+  - hostPath: F:\Yatin\Code\Yatin72Git\Name2Phone\k8s
+    containerPath: /k8s
+  - hostPath: F:\Yatin\Code\Yatin72Git\Name2Phone\resources-k8s
+    containerPath: /resource
+  - hostPath: F:\Yatin\Code\Yatin72Git\Name2Phone\cfg
+    containerPath: /cfg
+
+- role: worker
+- role: worker
+- role: worker
+
+

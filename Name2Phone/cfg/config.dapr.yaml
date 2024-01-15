@@ -1,0 +1,20 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: daprConfig
+  namespace: default
+spec:    
+  tracing:
+    enabled: true
+    exporterType: zipkin
+    samplingRate: "1"
+    expandParams: true
+    includeBody: true    
+    stdout: true
+    zipkin:
+      endpointAddress: http://host.docker.internal:9411/api/v2/spans
+  logging:
+    apiLogging:
+      enabled: true
+      obfuscateURLs: false
+      omitHealthChecks: true

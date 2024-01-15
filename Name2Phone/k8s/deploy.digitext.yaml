@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: digitext-deployment
+  labels:
+    app: digitext
+spec:
+  replicas: 1
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: digitext
+  template:
+    metadata:
+      # We add the annotations below to let Dapr recognize
+      # and deploy the sidecar together with our service in the pod.
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/config: "daprconfig-k8s"
+        dapr.io/app-id: "digitext"
+        dapr.io/app-port: "5002"
+        dapr.io/app-protocol: http
+        dapr.io/log-level: debug
+        dapr.io/enable-api-logging: "true"
+        dapr.io/app-health-check-path: /health
+      labels:
+        app: digitext
+    spec:
+      containers:
+      - name: digitext
+        imagePullPolicy: Never
+        image: digitext:latest
+        ports:
+        - containerPort: 5002
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          initialDelaySeconds: 3
+          periodSeconds: 50          
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          initialDelaySeconds: 3
+          periodSeconds: 50         
+        
+# service def
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: digitext-srv
+  labels: 
+    app: digitext
+spec:
+  # type: ClusterIP
+  type: NodePort
+  selector:
+    app: digitext
+  ports:
+  ## For NodePort
+  - port: 5002
+    targetPort: 5002
+    nodePort: 30202
+    protocol: TCP
+    name: http

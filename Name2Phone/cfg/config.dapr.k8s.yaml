@@ -1,0 +1,21 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: daprconfig-k8s
+  namespace: default
+spec:    
+  tracing:
+#    enabled: "true"
+    samplingRate: "1"
+#    exporterType: zipkin
+#    expandParams: true
+#    includeBody: true    
+    stdout: true
+    zipkin:
+      endpointAddress: "http://zipkin.default.svc.cluster.local:9411/api/v2/spans"
+  logging:
+    apiLogging:
+      enabled: true
+      obfuscateURLs: false
+      omitHealthChecks: true
+

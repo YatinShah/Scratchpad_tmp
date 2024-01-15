@@ -1,0 +1,178 @@
+version: '3.4'
+
+services:
+
+  redis:        
+    container_name: redis
+    build:
+        context: ./redis
+    image: daprredis:local
+    privileged: true
+    command: sh -c "./init.sh"
+    ports:
+        - "6379:6379"
+
+# ######################################################################
+# #applications 
+  digitizer:
+    container_name: digitizer
+    image: ${DOCKER_REGISTRY-}digitizer
+    ports:
+      - "50001:50001" # Dapr instances communicate over gRPC so we need to expose the gRPC port
+      - "5216:5216" 
+      - "3506:3506"   # sidecar ports
+    build:
+      context: .
+      dockerfile: Digitizing/Dockerfile
+    depends_on:
+      - digitsworker
+      - istdapi
+      - digitext
+
+
+  digitizer-sidecar:
+    container_name: digitizer-sidecar
+    image: daprio/dapr:edge
+    command: [
+      "./daprd",
+      "--config","/cfg/config.dapr.yaml",
+     "--app-id", "digitizer",
+     "--app-port", "5216",
+     "--placement-host-address", "placement:50006", # Dapr's placement service can be reach via the docker DNS entry
+     "--dapr-grpc-port", "50001",
+     "--app-protocol","http",
+     "--dapr-http-port", "3506",
+     "--resources-path", "/resources",
+     "--log-level","debug",
+     "--enable-api-logging","true",
+     "--dapr-listen-addresses","0.0.0.0",
+     "--enable-app-health-check","true",
+     "--app-health-check-path", "/health"
+     ]
+    volumes:
+        - "./cfg/:/cfg" #dapr config file
+        - "./resources-docker/:/resources" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
+    depends_on:
+      - digitizer
+    network_mode: 'service:digitizer'
+
+
+##########################################################################
+  digitsworker:
+    container_name: digitsworker
+    image: ${DOCKER_REGISTRY-}digitsworker
+    ports:
+      - "50002:50002" # Dapr instances communicate over gRPC so we need to expose the gRPC port
+      - "5000:5000"
+      - "3500:3500"   # port for the sidecar
+    build:
+      context: .
+      dockerfile: DigitsWorker/Dockerfile
+
+
+  digitsworker-sidecar:
+    container_name: digitsworker-sidecar
+    image: daprio/dapr:1.12.3
+    # ports:
+    #   - "3500:3500" 
+    command: [
+      "./daprd",
+      "--config","/cfg/config.dapr.yaml",
+     "--app-id", "digitsworker",
+     "--app-port", "5000",
+     "--placement-host-address", "placement:50006", # Dapr's placement service can be reach via the docker DNS entry
+     "--dapr-grpc-port", "50002",
+     "--app-protocol","http",
+     "--dapr-http-port", "3500",
+     "--resources-path", "/resources",
+     "--log-level","debug",
+     "--enable-api-logging","true",
+     "--dapr-listen-addresses","0.0.0.0",
+     "--enable-app-health-check","true",
+     "--app-health-check-path", "/health"
+     ]
+    volumes:
+        - "./cfg/:/cfg" #dapr config file
+        - "./resources-docker/:/resources" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
+    depends_on:
+      - digitsworker
+    network_mode: 'service:digitsworker'
+
+
+##########################################################################
+  digitext:
+    container_name: digitext
+    image: ${DOCKER_REGISTRY-}digitext
+    ports:
+      - "50007:50007" # Dapr instances communicate over gRPC so we need to expose the gRPC port
+      - "5002:5002"
+      - "3502:3502"   # port for the sidecar
+    build:
+      context: .
+      dockerfile: phone2Name/Dockerfile
+    depends_on:
+      - placement
+      - redis
+
+
+  digitext-sidecar:
+    container_name: digitext-sidecar
+    image: daprio/dapr:1.12.3
+    # ports:
+    #   - "3502:3502" 
+    command: [
+      "./daprd",
+      "--config","/cfg/config.dapr.yaml",
+     "--app-id", "digitext",
+     "--app-port", "5002",
+     "--placement-host-address", "placement:50006", # Dapr's placement service can be reach via the docker DNS entry
+     "--dapr-grpc-port", "50002",
+     "--app-protocol","http",
+     "--dapr-http-port", "3502",
+     "--resources-path", "/resources",
+     "--log-level","debug",
+     "--enable-api-logging","true",
+     "--dapr-listen-addresses","0.0.0.0",
+     "--enable-app-health-check","true",
+     "--app-health-check-path", "/health"
+
+     ]
+    volumes:
+        - "./cfg/:/cfg" #dapr config file
+        - "./resources-docker/:/resources" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
+    depends_on:
+      - digitext
+    network_mode: 'service:digitext'
+
+
+##########################################################################
+  istdapi:
+    container_name: istdapi
+    image: ${DOCKER_REGISTRY-}istdapi
+    ports:
+      - "5142:5142"
+    build:
+      context: .
+      dockerfile: IstdApi/Dockerfile
+
+
+##########################################################################
+  placement:
+    container_name: placement
+    image: "daprio/dapr"
+    command: ["./placement", 
+#        "--metadata-enabled","true",
+        "--log-level", "debug",
+        "--port", "50006"]
+    ports:
+      - "50006:50006"
+      - "8080:8080"
+    # extra_hosts:
+    #   host.docker.internal: "172.17.0.1"
+
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9511:9411"

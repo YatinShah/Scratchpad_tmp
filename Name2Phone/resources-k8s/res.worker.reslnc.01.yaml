@@ -1,0 +1,33 @@
+# https://docs.dapr.io/operations/resiliency/policies/
+apiVersion: dapr.io/v1alpha1
+kind: Resiliency
+metadata:
+  name: digitsworkerresiliency
+spec:
+  policies:
+    retries:
+      DaprBuiltInServiceRetries: # Overrides default retry behavior for service-to-service calls
+        policy: constant
+        duration: 5s
+        maxRetries: 10
+      retryForever:     # create a custom policy
+        policy: constant
+        maxInterval: 5s
+        maxRetries: -1 
+
+    circuitBreakers:
+      simpleCB:
+        maxRequests: 1
+        timeout: 5s 
+        trip: consecutiveFailures >= 5
+
+  targets:
+    apps:
+      istdapi:
+        retry: retryForever
+        circuitBreaker: simpleCB
+
+scopes:  # optionally scope the policy to specific apps
+   - digitsworker
+
+

@@ -1,0 +1,13 @@
+# https://kubernetes.io/docs/concepts/configuration/configmap/
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: digitizer-cfgmap
+data:
+  AppCfg__IstdServiceBaseUrl: "http://istdapi-srv:5142"
+  AppCfg__WorkerServiceAppId: "digitsworker"
+  AppCfg__SecretStore: "digitizing-secrets"
+  AppCfg__StateStore: "digistore"
+  AppCfg__ConfigStore: "digiconfig"
+

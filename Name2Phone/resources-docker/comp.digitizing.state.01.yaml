@@ -1,0 +1,19 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: digistore
+spec:
+  type: state.redis
+  version: v1
+  metadata:
+  - name: redisHost
+    value: redis:6379
+  - name: redisPassword
+    secretKeyRef:
+      name: redisPass
+      key: redisPass      
+  - name: actorStateStore
+    value: "true"
+
+auth:
+  secretStore: compsecrets

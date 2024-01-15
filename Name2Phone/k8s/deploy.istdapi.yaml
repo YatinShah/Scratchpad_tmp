@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istdapi-deployment
+  labels:
+    app: istdapi
+spec:
+  replicas: 1
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: istdapi
+  template:
+    metadata:
+      labels:
+        app: istdapi
+    spec:
+      containers:
+      - name: istdapi
+        imagePullPolicy: Never
+        image: istdapi:latest
+        ports:
+        - containerPort: 5142
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5142
+          initialDelaySeconds: 3
+          periodSeconds: 50          
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5142
+          initialDelaySeconds: 3
+          periodSeconds: 50         
+        
+        
+# service def
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: istdapi-srv
+  labels: 
+    app: istdapi
+spec:
+  type: NodePort
+  selector:
+    app: istdapi
+  ports:
+  - port: 5142
+    targetPort: 5142
+    nodePort: 30142
+    protocol: TCP
+    name: http

@@ -1,0 +1,10 @@
+apiVersion: dapr.io/v2alpha1
+kind: Subscription
+metadata:
+  name: digiworkerpubsubres
+spec:
+  topic: phone
+  routes: 
+    default: /api/Work/Process
+  pubsubname: digiworkerpubsub
+

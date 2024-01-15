@@ -1,0 +1,132 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digitizing", "Digitizing\Digitizing.csproj", "{EE4F816C-F02D-4D05-BCB0-91C1F2E76909}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigitsWorker", "DigitsWorker\DigitsWorker.csproj", "{2242FA48-6045-4723-85CD-46F18597E9F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IstdApi", "IstdApi\IstdApi.csproj", "{FA99A2E2-566B-40D0-A7EA-16536AD6EB08}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{96CE86F1-594A-40FF-BB06-CCCB8DA4036E}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		dapr.md = dapr.md
+		multiApp.yaml = multiApp.yaml
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{BB7187E2-77A8-424F-94E1-B0CA5A9A827E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cfg", "cfg", "{1EED984D-D626-45E7-82AC-50916B379BB5}"
+	ProjectSection(SolutionItems) = preProject
+		cfg\config.dapr.k8s.yaml = cfg\config.dapr.k8s.yaml
+		cfg\config.dapr.yaml = cfg\config.dapr.yaml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "phone2Name", "phone2Name\phone2Name.csproj", "{6EE9AC41-1D99-4AFF-986D-63A1CC9E0FC7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NamingLib", "NamingLib\NamingLib.csproj", "{3AF10DED-7FFC-41C0-9FA6-20772EE6DED5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources-local", "resources-local", "{28D8E718-7DDE-4459-B36D-9A0DE1A84F88}"
+	ProjectSection(SolutionItems) = preProject
+		resources-local\comp.digitizing.config.01.yaml = resources-local\comp.digitizing.config.01.yaml
+		resources-local\comp.digitizing.cron.01.yaml = resources-local\comp.digitizing.cron.01.yaml
+		resources-local\comp.digitizing.pubsub.01.yaml = resources-local\comp.digitizing.pubsub.01.yaml
+		resources-local\comp.digitizing.secret.01.yaml = resources-local\comp.digitizing.secret.01.yaml
+		resources-local\comp.digitizing.state.01.yaml = resources-local\comp.digitizing.state.01.yaml
+		resources-local\comp.secret.00.yaml = resources-local\comp.secret.00.yaml
+		resources-local\comp.worker.pubsub.01.yaml = resources-local\comp.worker.pubsub.01.yaml
+		resources-local\digitizing.secrets.json = resources-local\digitizing.secrets.json
+		resources-local\redis.secret.json = resources-local\redis.secret.json
+		resources-local\res.digitizing.pubsub.01.yaml = resources-local\res.digitizing.pubsub.01.yaml
+		resources-local\res.digitizing.reslnc.01.yaml = resources-local\res.digitizing.reslnc.01.yaml
+		resources-local\res.worker.pubsub.01.yaml = resources-local\res.worker.pubsub.01.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources-docker", "resources-docker", "{A20783AB-7033-40DB-BAAF-E35404F03050}"
+	ProjectSection(SolutionItems) = preProject
+		resources-docker\comp.digitizing.config.01.yaml = resources-docker\comp.digitizing.config.01.yaml
+		resources-docker\comp.digitizing.cron.01.yaml = resources-docker\comp.digitizing.cron.01.yaml
+		resources-docker\comp.digitizing.pubsub.01.yaml = resources-docker\comp.digitizing.pubsub.01.yaml
+		resources-docker\comp.digitizing.secret.01.yaml = resources-docker\comp.digitizing.secret.01.yaml
+		resources-docker\comp.digitizing.state.01.yaml = resources-docker\comp.digitizing.state.01.yaml
+		resources-docker\comp.secret.00.yaml = resources-docker\comp.secret.00.yaml
+		resources-docker\comp.worker.pubsub.01.yaml = resources-docker\comp.worker.pubsub.01.yaml
+		resources-docker\digitizing.secrets.json = resources-docker\digitizing.secrets.json
+		resources-docker\redis.secret.json = resources-docker\redis.secret.json
+		resources-docker\res.digitizing.pubsub.01.yaml = resources-docker\res.digitizing.pubsub.01.yaml
+		resources-docker\res.digitizing.reslnc.01.yaml = resources-docker\res.digitizing.reslnc.01.yaml
+		resources-docker\res.worker.pubsub.01.yaml = resources-docker\res.worker.pubsub.01.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{9F3CC8D9-8EB7-4630-A452-1C9228CDD2DA}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\dapr-api-token.yaml = k8s\dapr-api-token.yaml
+		k8s\deploy.cmd = k8s\deploy.cmd
+		k8s\deploy.digitext.yaml = k8s\deploy.digitext.yaml
+		k8s\deploy.digitizer.configmap.yaml = k8s\deploy.digitizer.configmap.yaml
+		k8s\deploy.digitizer.yaml = k8s\deploy.digitizer.yaml
+		k8s\deploy.digitsworker.yaml = k8s\deploy.digitsworker.yaml
+		k8s\deploy.istdapi.yaml = k8s\deploy.istdapi.yaml
+		k8s\digitizing.secret.01.yaml = k8s\digitizing.secret.01.yaml
+		k8s\ingress.nginx.yaml = k8s\ingress.nginx.yaml
+		k8s\ingress.srv.yaml = k8s\ingress.srv.yaml
+		k8s\kind-cluster-config.yaml = k8s\kind-cluster-config.yaml
+		k8s\volume.yaml = k8s\volume.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources-k8s", "resources-k8s", "{79BA1AF5-EFBA-4F2C-8DFA-AB990F62C7FE}"
+	ProjectSection(SolutionItems) = preProject
+		resources-k8s\comp.digitext.state.01.yaml = resources-k8s\comp.digitext.state.01.yaml
+		resources-k8s\comp.digitizing.config.01.yaml = resources-k8s\comp.digitizing.config.01.yaml
+		resources-k8s\comp.digitizing.cron.01.yaml = resources-k8s\comp.digitizing.cron.01.yaml
+		resources-k8s\comp.digitizing.pubsub.01.yaml = resources-k8s\comp.digitizing.pubsub.01.yaml
+		resources-k8s\comp.digitizing.secret.01.yaml = resources-k8s\comp.digitizing.secret.01.yaml
+		resources-k8s\comp.digitizing.state.01.yaml = resources-k8s\comp.digitizing.state.01.yaml
+		resources-k8s\comp.worker.pubsub.01.yaml = resources-k8s\comp.worker.pubsub.01.yaml
+		resources-k8s\res.digitizing.pubsub.01.yaml = resources-k8s\res.digitizing.pubsub.01.yaml
+		resources-k8s\res.digitizing.reslnc.01.yaml = resources-k8s\res.digitizing.reslnc.01.yaml
+		resources-k8s\res.worker.pubsub.01.yaml = resources-k8s\res.worker.pubsub.01.yaml
+		resources-k8s\res.worker.reslnc.01.yaml = resources-k8s\res.worker.reslnc.01.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE4F816C-F02D-4D05-BCB0-91C1F2E76909}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE4F816C-F02D-4D05-BCB0-91C1F2E76909}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE4F816C-F02D-4D05-BCB0-91C1F2E76909}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE4F816C-F02D-4D05-BCB0-91C1F2E76909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2242FA48-6045-4723-85CD-46F18597E9F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2242FA48-6045-4723-85CD-46F18597E9F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2242FA48-6045-4723-85CD-46F18597E9F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2242FA48-6045-4723-85CD-46F18597E9F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA99A2E2-566B-40D0-A7EA-16536AD6EB08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA99A2E2-566B-40D0-A7EA-16536AD6EB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA99A2E2-566B-40D0-A7EA-16536AD6EB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA99A2E2-566B-40D0-A7EA-16536AD6EB08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB7187E2-77A8-424F-94E1-B0CA5A9A827E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB7187E2-77A8-424F-94E1-B0CA5A9A827E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB7187E2-77A8-424F-94E1-B0CA5A9A827E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB7187E2-77A8-424F-94E1-B0CA5A9A827E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EE9AC41-1D99-4AFF-986D-63A1CC9E0FC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EE9AC41-1D99-4AFF-986D-63A1CC9E0FC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EE9AC41-1D99-4AFF-986D-63A1CC9E0FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EE9AC41-1D99-4AFF-986D-63A1CC9E0FC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AF10DED-7FFC-41C0-9FA6-20772EE6DED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AF10DED-7FFC-41C0-9FA6-20772EE6DED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AF10DED-7FFC-41C0-9FA6-20772EE6DED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AF10DED-7FFC-41C0-9FA6-20772EE6DED5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2052DCC-E1AE-48FF-91C0-7F9D22C4F47D}
+	EndGlobalSection
+EndGlobal
