@@ -8,6 +8,8 @@ public class AppCfgSetting
     public required string FormattedPath { get; set; }
     public required string WorkerServiceAppId { get; set; }
     public required string ProcessDigitsPath { get; set; }
+    public required string DelayedResponsePath { get; set; }
+    public required string FaultPath { get; set; }
 
     public required PubSubSetting PubSub { get; set; } 
     public required string StateStore { get; set; }

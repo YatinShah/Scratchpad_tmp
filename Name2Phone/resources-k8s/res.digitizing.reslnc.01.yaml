@@ -4,27 +4,37 @@ metadata:
   name: digitizerresiliency
 spec:
   policies:
+    timeouts:
+      general: 4s
+      important: 20s
+      largeResponse: 25s
     retries:
-      retryForever:
+      retryLimited:
         policy: constant
-        maxInterval: 5s
-        maxRetries: -1 
+        maxInterval: 3s
+        maxRetries: 4
     circuitBreakers:
       simpleCB:
         maxRequests: 1
-        timeout: 5s 
-        trip: consecutiveFailures >= 5
+        interval: 120s
+        timeout: 40s 
+        trip: consecutiveFailures >= 3
 
   targets:
     apps:
       digitsworker:
-        retry: retryForever
+        timeout: important
+        retry: retryLimited
+        circuitBreaker: simpleCB
+      istdapi:
+        timeout: important
+        retry: retryLimited
         circuitBreaker: simpleCB
     components:
       statestore:
         outbound:
-          retry: retryForever
+          retry: retryLimited
           circuitBreaker: simpleCB
-
 scopes:
   - digitizer
+  - digitsworker

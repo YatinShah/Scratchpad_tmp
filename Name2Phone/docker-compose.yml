@@ -34,8 +34,8 @@ services:
     container_name: digitizer-sidecar
     image: daprio/dapr:edge
     command: [
-      "./daprd",
-      "--config","/cfg/config.dapr.yaml",
+     "./daprd",
+     "--config","/cfg/config.dapr.yaml",
      "--app-id", "digitizer",
      "--app-port", "5216",
      "--placement-host-address", "placement:50006", # Dapr's placement service can be reach via the docker DNS entry
@@ -51,7 +51,7 @@ services:
      ]
     volumes:
         - "./cfg/:/cfg" #dapr config file
-        - "./resources-docker/:/resources" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
+        - "./resources-docker/:/resources" # 
     depends_on:
       - digitizer
     network_mode: 'service:digitizer'
@@ -76,8 +76,8 @@ services:
     # ports:
     #   - "3500:3500" 
     command: [
-      "./daprd",
-      "--config","/cfg/config.dapr.yaml",
+     "./daprd",
+     "--config","/cfg/config.dapr.yaml",
      "--app-id", "digitsworker",
      "--app-port", "5000",
      "--placement-host-address", "placement:50006", # Dapr's placement service can be reach via the docker DNS entry
@@ -93,7 +93,7 @@ services:
      ]
     volumes:
         - "./cfg/:/cfg" #dapr config file
-        - "./resources-docker/:/resources" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
+        - "./resources-docker/:/resources" # 
     depends_on:
       - digitsworker
     network_mode: 'service:digitsworker'
@@ -121,8 +121,8 @@ services:
     # ports:
     #   - "3502:3502" 
     command: [
-      "./daprd",
-      "--config","/cfg/config.dapr.yaml",
+     "./daprd",
+     "--config","/cfg/config.dapr.yaml",
      "--app-id", "digitext",
      "--app-port", "5002",
      "--placement-host-address", "placement:50006", # Dapr's placement service can be reach via the docker DNS entry
@@ -139,7 +139,7 @@ services:
      ]
     volumes:
         - "./cfg/:/cfg" #dapr config file
-        - "./resources-docker/:/resources" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
+        - "./resources-docker/:/resources" # 
     depends_on:
       - digitext
     network_mode: 'service:digitext'

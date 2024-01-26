@@ -12,27 +12,23 @@
 
 ################# DAPR Guts
 
+## Check and wait for side car to respond , wait for  10 secs
 GET {{Digitizing_HostAddress}}/api/dapr/Sidecar/10
 
-###
+### Check side car health along with app health
 GET {{Digitizing_HostAddress}}/api/dapr/SidecarHealth
 
-###
+### Check side car health only
 GET {{Digitizing_HostAddress}}/api/dapr/SidecarPartialHealth
 
-###
-
+### Get configuration values using Dapr API
 GET {{Digitizing_HostAddress}}/api/dapr/ConfigValues
 
-###
+### Get secrets from a multivalued secret store
 #(local & docker, multivalue=true)
 GET {{Digitizing_HostAddress}}/api/dapr/SecretValues/layered
-###
 
-GET {{Digitizing_HostAddress}}/api/dapr/StateValues/Key1
-
-###
-
+### Set state
 POST {{Digitizing_HostAddress}}/api/dapr/StateValues
 Content-Type: application/json
 
@@ -41,21 +37,35 @@ Content-Type: application/json
   "Value": "Key1-Value"
 }
 
-###
+### Get state values
+GET {{Digitizing_HostAddress}}/api/dapr/StateValues/Key1
 
+### Call the same API Cron binding is calling 
 POST {{Digitizing_HostAddress}}/api/dapr/digicron
 
-###
-
+###  remove sidecar from the pod
 # DELETE {{Digitizing_HostAddress}}/api/dapr/Sidecar
 
+### Call a non-dapr service using Dapr Http API
+GET {{Digitizing_HostAddress}}/api/dapr/NonDaprEpResiliency/001
+
+### Call a Dapr service using Dapr Http API
+GET {{Digitizing_HostAddress}}/api/dapr/DaprEpResiliency/SuperWomen
+
+### Call an endpoint that times out.
+GET {{Digitizing_HostAddress}}/api/dapr/Delayed/2
+
+### Call an endpoint that throws 500
+GET {{Digitizing_HostAddress}}/api/dapr/Fault/false
+
 ###
+
 #######################
 
+### Convert a number to text (Calls Actors API)
 POST {{Digitizing_HostAddress}}/api/name/NumberToText/0014695762345
 
-###
-
+### A Post API To convert number to text
 POST {{Digitizing_HostAddress}}/api/name/Result
 Content-Type: application/json
 
@@ -64,23 +74,20 @@ Content-Type: application/json
   "CountryCode": "001"
 }
 
-###
-@Digitizing_HostAddress = 
-
+###  Convert a 10 digit text to number, Using DaprClient for Service integration
 GET {{Digitizing_HostAddress}}/api/name/TextToNumber/001MyNameYati
 
-###
-
+### Call a pubsub api
 GET {{Digitizing_HostAddress}}/api/name/Digitize/001MyNameYati
 
-###
+### Calls Spelling Alphabets
 GET {{Digitizing_HostAddress}}/api/name/Elaborate/string
 
-###
+### Health check on the API
 GET {{Digitizing_HostAddress}}/health
 
 ###
-######################### Works in Local Or Docker only !!!
+######################### Calls Dapr components directly, works in non-k8s env.
 POST {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/state/{{stateStore}}
 Content-Type: application/json
 
@@ -107,10 +114,10 @@ DELETE {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/state/{{stateStore}}/sta
 
 ###
 GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/secrets/{{secretStore}}/layered
-### (MultiValue=true)
+### (MultiValue=true) Only valid for local/docker deployment!
 GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/secrets/{{secretStore}}/layered
 
-### K8s (MultiValue=false)###
+### K8s (MultiValue=false) only valid for K8s deployment###
 GET {{Digitizing_Dapr_HostAddress}}/{{dapr_Api_Ver}}/secrets/digitizing-secrets/digitizingsecrets
 
 ###

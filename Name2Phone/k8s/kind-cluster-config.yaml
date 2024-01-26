@@ -52,7 +52,7 @@ nodes:
     containerPath: /cfg
 
 - role: worker
-- role: worker
-- role: worker
+# - role: worker
+# - role: worker
 
 

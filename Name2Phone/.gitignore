@@ -397,7 +397,11 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+#SonarQube
+.sonar*/
 #dapr
 .dapr/
 2del/
 *.kubeconfig
+
+.sonar*/
